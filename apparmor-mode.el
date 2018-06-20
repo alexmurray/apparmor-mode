@@ -45,6 +45,7 @@
                                  "on"
                                  "owner"
                                  "quiet"
+                                 "rlimit"
                                  "to"))
 
 (defvar apparmor-mode-capabilities '("setuid"
@@ -70,6 +71,10 @@
 
 (defvar apparmor-mode-dbus-permissions '("r" "w" "rw" "send" "receive"
                                          "acquire" "bind" "read" "write"))
+
+(defvar apparmor-mode-rlimit-types '("fsize" "data" "stack" "core" "rss" "as" "memlock" "msgqueue"
+                                     "nofile" "locks" "sigpending" "nproc" "rtprio" "cpu"
+                                     "nice"))
 
 (defvar apparmor-mode-variable-regexp "^\\s-*\\(@{[[:alpha:]]+}\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$")
 
@@ -123,8 +128,10 @@
      (,(regexp-opt apparmor-mode-network-domains 'words) . font-lock-constant-face)
      (,(regexp-opt apparmor-mode-network-types 'words) . font-lock-constant-face)
      (,(regexp-opt apparmor-mode-dbus-permissions 'words) . font-lock-constant-face)
+     (,(regexp-opt apparmor-mode-rlimit-types 'words) . font-lock-constant-face)
      ("," . 'font-lock-builtin-face)
      ("=" . 'font-lock-builtin-face)
+     ("<=" . 'font-lock-builtin-face) ; rlimit
      ;; variables
      (,apparmor-mode-variable-regexp 1 font-lock-variable-name-face t)
      (,apparmor-mode-variable-regexp 2 font-lock-builtin-face t)
