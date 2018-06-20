@@ -35,41 +35,112 @@
 
 ;;; Code:
 
-(defvar apparmor-mode-keywords '("include"
+(defvar apparmor-mode-keywords '("audit"
                                  "capability"
+                                 "delegate"
+                                 "dbus"
                                  "deny"
+                                 "include"
                                  "network"
-                                 "owner"))
+                                 "on"
+                                 "owner"
+                                 "quiet"
+                                 "to"))
 
 (defvar apparmor-mode-capabilities '("setuid"
                                      "setgid"))
 
-(defvar apparmor-mode-network-families '("inet"
-                                 "packet"
-                                 "raw"))
+(defvar apparmor-mode-network-permissions '("create" "accept" "bind" "connect"
+                                            "listen" "read" "write" "send"
+                                            "receive" "getsockname" "getpeername"
+                                            "getsockopt" "setsockopt" "fcntl"
+                                            "ioctl" "shutdown" "getpeersec"))
 
-(defvar apparmor-mode-network-types '("dgram"
-                                      "stream"))
+(defvar apparmor-mode-network-domains '("inet" "ax25" "ipx" "appletalk" "netrom"
+                                        "bridge" "atmpvc" "x25" "inet6" "rose"
+                                        "netbeui" "security" "key" "packet"
+                                        "ash" "econet" "atmsvc" "sna" "irda"
+                                        "pppox" "wanpipe" "bluetooth"))
 
-(defvar apparmor-profile-regexp "^\\s-*\\(\\^?[[:word:]/_-]+\\)\\s-+{\\s-*$")
+(defvar apparmor-mode-network-types '("stream" "dgram" "seqpacket" "raw" "rdm"
+                                      "packet" "dccp"))
 
-(defvar apparmor-file-rule-regexp "^\\s-*\\(\\(owner\\|deny\\)\\s-+\\)?\\([[:word:]/@{}*.,_-]+\\)\\s-+\\([CPilmprwx]+\\)\\(\\s-*->\\s-*\\([[:word:]/]+\\)\\)?\\s-*,\\s-*#?.*$")
+;; TODO: this is not complete since is not fully documented
+(defvar apparmor-mode-network-protocols '("tcp" "udp" "icmp"))
+
+(defvar apparmor-mode-dbus-permissions '("r" "w" "rw" "send" "receive"
+                                         "acquire" "bind" "read" "write"))
+
+(defvar apparmor-mode-variable-regexp "^\\s-*\\(@{[[:alpha:]]+}\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$")
+
+(defvar apparmor-mode-profile-name-regexp "[[:word:]/_-]+")
+
+(defvar apparmor-mode-profile-regexp
+  (concat "^\\s-*\\(\\^?" apparmor-mode-profile-name-regexp "\\)\\s-+{\\s-*$"))
+
+(defvar apparmor-mode-file-rule-regexp
+  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)?"
+          "\\([][[:word:]/@{}*.,_-]+\\)\\s-+\\([CPUacilmpruwx]+\\)\\s-*"
+          "\\(->\\s-*\\(" apparmor-mode-profile-name-regexp "\\)\\)?\\s-*"
+          ","))
+
+(defvar apparmor-mode-network-rule-regexp
+  (concat
+   "^\\s-*\\(\\(audit\\|quiet\\|deny\\)\\s-+\\)?network\\s-*"
+   "\\(" (regexp-opt apparmor-mode-network-permissions 'words) "\\)?\\s-*"
+   "\\(" (regexp-opt apparmor-mode-network-domains 'words) "\\)?\\s-*"
+   "\\(" (regexp-opt apparmor-mode-network-types 'words) "\\)?\\s-*"
+   "\\(" (regexp-opt apparmor-mode-network-protocols 'words) "\\)?\\s-*"
+   ;; TODO: address expression
+   "\\(delegate\\s+to\\s+\\(" apparmor-mode-profile-name-regexp "\\)\\)?\\s-*"
+   ","))
+
+(defvar apparmor-mode-dbus-rule-regexp
+  (concat
+   "^\\s-*\\(\\(audit\\|deny\\)\\s-+\\)?dbus\\s-*"
+   "\\(\\(bus\\)=\\(system\\|session\\)\\)?\\s-*"
+   "\\(\\(dest\\)=\\([[:alpha:].]+\\)\\)?\\s-*"
+   "\\(\\(path\\)=\\([[:alpha:]/]+\\)\\)?\\s-*"
+   "\\(\\(interface\\)=\\([[:alpha:].]+\\)\\)?\\s-*"
+   "\\(\\(method\\)=\\([[:alpha:]_]+\\)\\)?\\s-*"
+   ;; permissions - either a single permission or multiple permissions in
+   ;; parentheses with commas and whitespace separating
+   "\\("
+   (regexp-opt apparmor-mode-dbus-permissions 'words)
+   "\\|"
+   "("
+   (regexp-opt apparmor-mode-dbus-permissions 'words)
+   "\\("
+   (regexp-opt apparmor-mode-dbus-permissions 'words) ",\\s-+"
+   "\\)"
+   "\\)?\\s-*"
+   ","))
 
 (defvar apparmor-mode-font-lock-defaults
   `(((,(regexp-opt apparmor-mode-keywords 'words) . font-lock-keyword-face)
      (,(regexp-opt apparmor-mode-capabilities 'words) . font-lock-constant-face)
-     (,(regexp-opt apparmor-mode-network-families 'words) . font-lock-constant-face)
+     (,(regexp-opt apparmor-mode-network-permissions 'words) . font-lock-constant-face)
+     (,(regexp-opt apparmor-mode-network-domains 'words) . font-lock-constant-face)
      (,(regexp-opt apparmor-mode-network-types 'words) . font-lock-constant-face)
+     (,(regexp-opt apparmor-mode-dbus-permissions 'words) . font-lock-constant-face)
      ("," . 'font-lock-builtin-face)
-     ("->" . 'font-lock-builtin-face)
-     ;; profile names
-     (,apparmor-profile-regexp 1 font-lock-function-name-face t)
-     ;; file paths
-     (,apparmor-file-rule-regexp 3 font-lock-variable-name-face t)
-     ;; file permissions
-     (,apparmor-file-rule-regexp 4 font-lock-constant-face t)
-     ;; transition profile
-     (,apparmor-file-rule-regexp 6 font-lock-function-name-face t))))
+     ("=" . 'font-lock-builtin-face)
+     ;; variables
+     (,apparmor-mode-variable-regexp 1 font-lock-variable-name-face t)
+     (,apparmor-mode-variable-regexp 2 font-lock-builtin-face t)
+     ;; profiles
+     (,apparmor-mode-profile-regexp 1 font-lock-function-name-face t)
+     ;; file rules
+     (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t)
+     (,apparmor-mode-file-rule-regexp 5 font-lock-builtin-face t)
+     (,apparmor-mode-file-rule-regexp 6 font-lock-function-name-face t)
+     ;; dbus rules
+     (,apparmor-mode-dbus-rule-regexp 4 font-lock-variable-name-face t) ;bus
+     (,apparmor-mode-dbus-rule-regexp 5 font-lock-constant-face t) ;system/session
+     (,apparmor-mode-dbus-rule-regexp 7 font-lock-variable-name-face t) ;dest
+     (,apparmor-mode-dbus-rule-regexp 10 font-lock-variable-name-face t)
+     (,apparmor-mode-dbus-rule-regexp 13 font-lock-variable-name-face t)
+     (,apparmor-mode-dbus-rule-regexp 16 font-lock-variable-name-face t))))
 
 (defvar apparmor-mode-syntax-table
   (let ((table (make-syntax-table)))
@@ -81,7 +152,7 @@
   "apparmor-mode is a major mode for editing AppArmor profiles."
   :syntax-table apparmor-mode-syntax-table
   (setq font-lock-defaults apparmor-mode-font-lock-defaults)
-  (setq imenu-generic-expression `(("Profiles" ,apparmor-profile-regexp 1)))
+  (setq imenu-generic-expression `(("Profiles" ,apparmor-mode-profile-regexp 1)))
   (setq comment-start "#")
   (setq comment-end ""))
 
