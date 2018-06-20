@@ -130,16 +130,16 @@
      (,(regexp-opt apparmor-mode-dbus-permissions 'words) . font-lock-constant-face)
      (,(regexp-opt apparmor-mode-rlimit-types 'words) . font-lock-constant-face)
      ("," . 'font-lock-builtin-face)
+     ("->" . 'font-lock-builtin-face)
      ("=" . 'font-lock-builtin-face)
+     ("+=" . 'font-lock-builtin-face)
      ("<=" . 'font-lock-builtin-face) ; rlimit
      ;; variables
      (,apparmor-mode-variable-regexp 1 font-lock-variable-name-face t)
-     (,apparmor-mode-variable-regexp 2 font-lock-builtin-face t)
      ;; profiles
      (,apparmor-mode-profile-regexp 1 font-lock-function-name-face t)
      ;; file rules
      (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t)
-     (,apparmor-mode-file-rule-regexp 5 font-lock-builtin-face t)
      (,apparmor-mode-file-rule-regexp 6 font-lock-function-name-face t)
      ;; dbus rules
      (,apparmor-mode-dbus-rule-regexp 4 font-lock-variable-name-face t) ;bus
