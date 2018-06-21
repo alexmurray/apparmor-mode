@@ -30,7 +30,7 @@
 ;; https://gitlab.com/apparmor/apparmor/wikis/ProfileLanguage
 
 ;; TODO:
-;; - add flycheck / flymake support via "apparmor_parser -Q -K </path/to/profile>"
+;; - add flymake support via "apparmor_parser -Q -K </path/to/profile>"
 ;; - add completion support for keywords etc
 ;;   - even better, do it syntactically via regexps
 ;; - decide if to use entire line regexp for statements or
@@ -179,6 +179,18 @@
 ;;;###autoload
 ;; todo - files in /etc/apparmor.d/ should use this syntax perhaps?
 ;;(add-to-list 'auto-mode-alist '("\\.apparmor\\'" . apparmor-mode))
+
+;; flycheck integration
+(with-eval-after-load 'flycheck
+  (flycheck-define-checker apparmor
+  "A checker using apparmor_parser. "
+  :command ("apparmor_parser" "-Q" "-K" source)
+  :error-patterns ((error line-start "AppArmor parser error for " (file-name)
+                          " in " (file-name) " at line " line ": " (message)
+                           line-end))
+  :modes apparmor-mode)
+
+  (add-to-list 'flycheck-checkers 'apparmor t))
 
 (provide 'apparmor-mode)
 ;;; apparmor-mode.el ends here
