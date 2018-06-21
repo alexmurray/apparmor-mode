@@ -39,27 +39,10 @@
 
 ;;; Code:
 
-(defvar apparmor-mode-keywords '("audit"
-                                 "capability"
-                                 "chmod"
-                                 "delegate"
-                                 "dbus"
-                                 "deny"
-                                 "include"
-                                 "link"
-                                 "mount"
-                                 "network"
-                                 "on"
-                                 "owner"
-                                 "pivot_root"
-                                 "quiet"
-                                 "remount"
-                                 "rlimit"
-                                 "safe"
-                                 "subset"
-                                 "to"
-                                 "umount"
-                                 "unsafe"))
+(defvar apparmor-mode-keywords '("audit" "capability" "chmod" "delegate" "dbus"
+                                 "deny" "include" "link" "mount" "network" "on"
+                                 "owner" "pivot_root" "quiet" "remount" "rlimit"
+                                 "safe" "subset" "to" "umount" "unsafe"))
 
 (defvar apparmor-mode-capabilities '("audit_control" "audit_write" "chown"
                                      "dac_override" "dac_read_search" "fowner"
@@ -95,8 +78,9 @@
 (defvar apparmor-mode-dbus-permissions '("r" "w" "rw" "send" "receive"
                                          "acquire" "bind" "read" "write"))
 
-(defvar apparmor-mode-rlimit-types '("fsize" "data" "stack" "core" "rss" "as" "memlock" "msgqueue"
-                                     "nofile" "locks" "sigpending" "nproc" "rtprio" "cpu"
+(defvar apparmor-mode-rlimit-types '("fsize" "data" "stack" "core" "rss" "as"
+                                     "memlock" "msgqueue" "nofile" "locks"
+                                     "sigpending" "nproc" "rtprio" "cpu"
                                      "nice"))
 
 (defvar apparmor-mode-variable-regexp "^\\s-*\\(@{[[:alpha:]]+}\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$")
