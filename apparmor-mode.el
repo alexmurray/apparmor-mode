@@ -48,8 +48,18 @@
                                  "rlimit"
                                  "to"))
 
-(defvar apparmor-mode-capabilities '("setuid"
-                                     "setgid"))
+(defvar apparmor-mode-capabilities '("audit_control" "audit_write" "chown"
+                                     "dac_override" "dac_read_search" "fowner"
+                                     "fsetid" "ipc_lock" "ipc_owner" "kill"
+                                     "lease" "linux_immutable" "mac_admin"
+                                     "mac_override" "mknod" "net_admin"
+                                     "net_bind_service" "net_broadcast"
+                                     "net_raw" "setfcap" "setgid" "setpcap"
+                                     "setuid" "sys_admin" "sys_boot"
+                                     "sys_chroot" "sys_module" "sys_nice"
+                                     "sys_pacct" "sys_ptrace" "sys_rawio"
+                                     "sys_resource" "sys_time"
+                                     "sys_tty_config"))
 
 (defvar apparmor-mode-network-permissions '("create" "accept" "bind" "connect"
                                             "listen" "read" "write" "send"
