@@ -29,6 +29,10 @@
 ;; https://gitlab.com/apparmor/apparmor/wikis/QuickProfileLanguage
 ;; https://gitlab.com/apparmor/apparmor/wikis/ProfileLanguage
 
+;; TODO:
+;; - decide if to use entire line regexp for statements or not (ie just a subset?)
+;; - expand highlighting of mount rules (options=...) similar to dbus
+
 ;;;; Setup
 
 ;; (require 'apparmor-mode)
@@ -37,16 +41,25 @@
 
 (defvar apparmor-mode-keywords '("audit"
                                  "capability"
+                                 "chmod"
                                  "delegate"
                                  "dbus"
                                  "deny"
                                  "include"
+                                 "link"
+                                 "mount"
                                  "network"
                                  "on"
                                  "owner"
+                                 "pivot_root"
                                  "quiet"
+                                 "remount"
                                  "rlimit"
-                                 "to"))
+                                 "safe"
+                                 "subset"
+                                 "to"
+                                 "umount"
+                                 "unsafe"))
 
 (defvar apparmor-mode-capabilities '("audit_control" "audit_write" "chown"
                                      "dac_override" "dac_read_search" "fowner"
@@ -142,6 +155,7 @@
      ("," . 'font-lock-builtin-face)
      ("->" . 'font-lock-builtin-face)
      ("=" . 'font-lock-builtin-face)
+     ("+" . 'font-lock-builtin-face)
      ("+=" . 'font-lock-builtin-face)
      ("<=" . 'font-lock-builtin-face) ; rlimit
      ;; variables
