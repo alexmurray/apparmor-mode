@@ -30,9 +30,13 @@
 ;; https://gitlab.com/apparmor/apparmor/wikis/ProfileLanguage
 
 ;; TODO:
-;; - decide if to use entire line regexp for statements or not (ie just a subset?)
-;; - expand highlighting of mount rules (options=...) similar to dbus
 ;; - add flycheck / flymake support via "apparmor_parser -Q -K </path/to/profile>"
+;; - add completion support for keywords etc
+;;   - even better, do it syntactically via regexps
+;; - decide if to use entire line regexp for statements or
+;;   - not (ie just a subset?)  if we use regexps above then
+;;   - should probably keep full regexps here so can reuse
+;; - expand highlighting of mount rules (options=...) similar to dbus
 
 ;;;; Setup
 
