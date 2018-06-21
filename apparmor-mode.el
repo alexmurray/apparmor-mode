@@ -32,6 +32,7 @@
 ;; TODO:
 ;; - decide if to use entire line regexp for statements or not (ie just a subset?)
 ;; - expand highlighting of mount rules (options=...) similar to dbus
+;; - add flycheck / flymake support via "apparmor_parser -Q -K </path/to/profile>"
 
 ;;;; Setup
 
