@@ -135,12 +135,12 @@
 
 (defvar apparmor-mode-font-lock-defaults
   `(((,(regexp-opt apparmor-mode-keywords 'words) . font-lock-keyword-face)
-     (,(regexp-opt apparmor-mode-capabilities 'words) . font-lock-constant-face)
-     (,(regexp-opt apparmor-mode-network-permissions 'words) . font-lock-constant-face)
-     (,(regexp-opt apparmor-mode-network-domains 'words) . font-lock-constant-face)
-     (,(regexp-opt apparmor-mode-network-types 'words) . font-lock-constant-face)
-     (,(regexp-opt apparmor-mode-dbus-permissions 'words) . font-lock-constant-face)
-     (,(regexp-opt apparmor-mode-rlimit-types 'words) . font-lock-constant-face)
+     (,(regexp-opt apparmor-mode-capabilities 'words) . font-lock-type-face)
+     (,(regexp-opt apparmor-mode-network-permissions 'words) . font-lock-type-face)
+     (,(regexp-opt apparmor-mode-network-domains 'words) . font-lock-type-face)
+     (,(regexp-opt apparmor-mode-network-types 'words) . font-lock-type-face)
+     (,(regexp-opt apparmor-mode-dbus-permissions 'words) . font-lock-type-face)
+     (,(regexp-opt apparmor-mode-rlimit-types 'words) . font-lock-type-face)
      ("," . 'font-lock-builtin-face)
      ("->" . 'font-lock-builtin-face)
      ("=" . 'font-lock-builtin-face)
