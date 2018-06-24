@@ -30,8 +30,7 @@
 ;; https://gitlab.com/apparmor/apparmor/wikis/ProfileLanguage
 
 ;; TODO:
-;; - add completion support for keywords etc
-;;   - even better, do it syntactically via regexps
+;; - do smarter completion syntactically via regexps
 ;; - decide if to use entire line regexp for statements or
 ;;   - not (ie just a subset?)  if we use regexps above then
 ;;   - should probably keep full regexps here so can reuse
@@ -179,10 +178,17 @@
     (modify-syntax-entry ?\n ">" table)
     table))
 
-;; TODO
+;; TODO - make a lot smarter than just keywords - complete paths from the
+;; system if we look like a path, do sub-completion based on the current lines
+;; keyword etc - ie match against syntax highlighting regexes and use those to
+;; further complete etc
 (defun apparmor-mode-completion-at-point ()
   "`completion-at-point' function for apparmor-mode."
- )
+  (let ((bounds (bounds-of-thing-at-point 'symbol)))
+    (list (car bounds) ; start
+          (cdr bounds) ; end
+          apparmor-mode-keywords
+          :company-docsig #'identity)))
 
 (defun apparmor-mode-indent-line ()
   "Indent current line in apparmor-mode."
@@ -226,6 +232,7 @@
   :syntax-table apparmor-mode-syntax-table
   (setq font-lock-defaults apparmor-mode-font-lock-defaults)
   (set (make-local-variable 'indent-line-function) #'apparmor-mode-indent-line)
+  (add-to-list 'completion-at-point-functions #'apparmor-mode-completion-at-point)
   (setq imenu-generic-expression `(("Profiles" ,apparmor-mode-profile-regexp 1)))
   (setq comment-start "#")
   (setq comment-end ""))
