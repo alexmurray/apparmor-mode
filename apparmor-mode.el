@@ -30,8 +30,6 @@
 ;; https://gitlab.com/apparmor/apparmor/wikis/ProfileLanguage
 
 ;; TODO:
-;; - make indentation smarter by counting preceding opening + closing braces
-;;   which are not in comments to find indetation level
 ;; - add completion support for keywords etc
 ;;   - even better, do it syntactically via regexps
 ;; - decide if to use entire line regexp for statements or
@@ -203,9 +201,14 @@
    (t
     (indent-line-to (save-excursion
                       (forward-line -1)
+                      ;; keep going backwards until we have a line with actual
+                      ;; content since blank lines don't count
+                      (while (and (looking-at "^\\s-*$")
+                                  (> (point) (point-min)))
+                        (forward-line -1))
                       (cond
                        ((looking-at "\\(^.*{[^}]*$\\)")
-                        ;; previous line opened a block indent to that line
+                        ;; previous line opened a block, indent to that line
                         (+ (current-indentation) apparmor-mode-indent-offset))
                        (t
                         ;; default case, indent the same as previous line
