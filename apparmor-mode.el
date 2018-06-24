@@ -36,6 +36,7 @@
 ;;   - should probably keep full regexps here so can reuse
 ;; - expand highlighting of mount rules (options=...) similar to dbus
 ;; - add flymake support via "apparmor_parser -Q -K </path/to/profile>"
+;; - add tests via ert etc
 
 ;;;; Setup
 
