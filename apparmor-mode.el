@@ -168,7 +168,7 @@
     (modify-syntax-entry ?\n ">" table)
     table))
 
-(define-derived-mode apparmor-mode fundamental-mode "aa"
+(define-derived-mode apparmor-mode prog-mode "aa"
   "apparmor-mode is a major mode for editing AppArmor profiles."
   :syntax-table apparmor-mode-syntax-table
   (setq font-lock-defaults apparmor-mode-font-lock-defaults)
