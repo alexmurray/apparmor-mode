@@ -30,19 +30,30 @@
 ;; https://gitlab.com/apparmor/apparmor/wikis/ProfileLanguage
 
 ;; TODO:
-;; - add flymake support via "apparmor_parser -Q -K </path/to/profile>"
+;; - make indentation smarter by counting preceding opening + closing braces
+;;   which are not in comments to find indetation level
 ;; - add completion support for keywords etc
 ;;   - even better, do it syntactically via regexps
 ;; - decide if to use entire line regexp for statements or
 ;;   - not (ie just a subset?)  if we use regexps above then
 ;;   - should probably keep full regexps here so can reuse
 ;; - expand highlighting of mount rules (options=...) similar to dbus
+;; - add flymake support via "apparmor_parser -Q -K </path/to/profile>"
 
 ;;;; Setup
 
 ;; (require 'apparmor-mode)
 
 ;;; Code:
+
+(defgroup apparmor-mode nil
+  "Major mode for editing AppArmor policies."
+  :group 'tools)
+
+(defcustom apparmor-mode-indent-offset 2
+  "Indentation offset in apparmor-mode buffers."
+  :type 'integer
+  :group 'apparmor-mode)
 
 (defvar apparmor-mode-keywords '("audit" "capability" "chmod" "delegate" "dbus"
                                  "deny" "include" "link" "mount" "network" "on"
@@ -168,10 +179,43 @@
     (modify-syntax-entry ?\n ">" table)
     table))
 
+(defun apparmor-mode-indent-line ()
+  "Indent current line in apparmor-mode."
+  (interactive)
+  (if (bolp)
+      (apparmor-mode--indent-line)
+    (save-excursion
+      (apparmor-mode--indent-line))))
+
+(defun apparmor-mode--indent-line ()
+  "Indent current line in apparmor-mode."
+  (beginning-of-line)
+  (cond
+   ((bobp)
+    ;; simple case indent to 0
+    (indent-line-to 0))
+   ((looking-at "^\\s-*}\\s-*$")
+    ;; block closing, deindent relative to previous line
+    (indent-line-to (save-excursion
+                      (forward-line -1)
+                      (max 0 (- (current-indentation) apparmor-mode-indent-offset)))))
+    ;; other cases need to look at previous lines
+   (t
+    (indent-line-to (save-excursion
+                      (forward-line -1)
+                      (cond
+                       ((looking-at "\\(^.*{[^}]*$\\)")
+                        ;; previous line opened a block indent to that line
+                        (+ (current-indentation) apparmor-mode-indent-offset))
+                       (t
+                        ;; default case, indent the same as previous line
+                        (current-indentation))))))))
+
 (define-derived-mode apparmor-mode prog-mode "aa"
   "apparmor-mode is a major mode for editing AppArmor profiles."
   :syntax-table apparmor-mode-syntax-table
   (setq font-lock-defaults apparmor-mode-font-lock-defaults)
+  (set (make-local-variable 'indent-line-function) #'apparmor-mode-indent-line)
   (setq imenu-generic-expression `(("Profiles" ,apparmor-mode-profile-regexp 1)))
   (setq comment-start "#")
   (setq comment-end ""))
