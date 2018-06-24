@@ -173,9 +173,16 @@
 
 (defvar apparmor-mode-syntax-table
   (let ((table (make-syntax-table)))
+    ;; # is comment start
     (modify-syntax-entry ?# "<" table)
+    ;; newline finishes comment line
     (modify-syntax-entry ?\n ">" table)
     table))
+
+;; TODO
+(defun apparmor-mode-completion-at-point ()
+  "`completion-at-point' function for apparmor-mode."
+ )
 
 (defun apparmor-mode-indent-line ()
   "Indent current line in apparmor-mode."
