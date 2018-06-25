@@ -7,10 +7,10 @@
 Provides an enhanced editing environment for AppArmor policy files within Emacs, including:
 
 * Syntax highlighting
-* Keyword completion
-  via
-  [completion-at-point](https://www.gnu.org/software/emacs/manual/html_node/elisp/Completion-in-Buffers.html)
+* Keyword completion via [completion-at-point](https://www.gnu.org/software/emacs/manual/html_node/elisp/Completion-in-Buffers.html)
 * [Flycheck](http://www.flycheck.org/) integration for basic on-the-fly syntax validation via [apparmor_parser](http://manpages.ubuntu.com/manpages/xenial/man8/apparmor_parser.8.html)
+
+![apparmor-mode screenshot](screenshots/apparmor-mode.png)
 
 ## Installation
 
