@@ -28,7 +28,17 @@ To enable then simply add the following to your init file:
 
 Then when opening an AppArmor policy file enable via:
 
-```M-x apparmor-mode```
+```
+M-x apparmor-mode
+```
+
+To ensure this is done automatically, add the following to the top of the
+policy file:
+
+```
+# -*- mode:apparmor -*-
+```
+
 
 ### Manual
 
