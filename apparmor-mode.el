@@ -97,7 +97,10 @@
                                      "sigpending" "nproc" "rtprio" "cpu"
                                      "nice"))
 
-(defvar apparmor-mode-variable-regexp "^\\s-*\\(@{[[:alpha:]]+}\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$")
+(defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]]+}")
+
+(defvar apparmor-mode-variable-regexp
+  (concat "^\\s-*\\(" apparmor-mode-variable-name-regexp "\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$"))
 
 (defvar apparmor-mode-profile-name-regexp "[[:word:]/_-]+")
 
@@ -157,7 +160,7 @@
      ("+=" . 'font-lock-builtin-face)
      ("<=" . 'font-lock-builtin-face) ; rlimit
      ;; variables
-     (,apparmor-mode-variable-regexp 1 font-lock-variable-name-face t)
+     (,apparmor-mode-variable-name-regexp 0 font-lock-variable-name-face t)
      ;; profiles
      (,apparmor-mode-profile-regexp 1 font-lock-function-name-face t)
      ;; file rules
