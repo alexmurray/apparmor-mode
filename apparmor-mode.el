@@ -177,6 +177,8 @@
     (modify-syntax-entry ?# "<" table)
     ;; newline finishes comment line
     (modify-syntax-entry ?\n ">" table)
+    ;; / is used in path names which we want to treat as an entire word
+    (modify-syntax-entry ?/ "w" table)
     table))
 
 ;; TODO - make a lot smarter than just keywords - complete paths from the
