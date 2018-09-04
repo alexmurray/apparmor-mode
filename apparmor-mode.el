@@ -97,6 +97,8 @@
                                      "sigpending" "nproc" "rtprio" "cpu"
                                      "nice"))
 
+(defvar apparmor-mode-include-regexp "\\(#?include\\)\\s-+\\([<\"][[:graph:]]+[\">]\\)")
+
 (defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]]+}")
 
 (defvar apparmor-mode-variable-regexp
@@ -159,6 +161,9 @@
      ("+" . 'font-lock-builtin-face)
      ("+=" . 'font-lock-builtin-face)
      ("<=" . 'font-lock-builtin-face) ; rlimit
+     ;; includes
+     (,apparmor-mode-include-regexp 1 font-lock-preprocessor-face t)
+     (,apparmor-mode-include-regexp 2 font-lock-string-face t)
      ;; variables
      (,apparmor-mode-variable-name-regexp 0 font-lock-variable-name-face t)
      ;; profiles
