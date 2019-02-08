@@ -155,7 +155,9 @@
      (,(regexp-opt apparmor-mode-network-types 'words) . font-lock-type-face)
      (,(regexp-opt apparmor-mode-dbus-permissions 'words) . font-lock-type-face)
      (,(regexp-opt apparmor-mode-rlimit-types 'words) . font-lock-type-face)
-     ("," . 'font-lock-builtin-face)
+     ;; comma at end-of-line
+     (",\\s-*$" . 'font-lock-builtin-face)
+     ;; TODO be more specific about where these are valid
      ("->" . 'font-lock-builtin-face)
      ("=" . 'font-lock-builtin-face)
      ("+" . 'font-lock-builtin-face)
@@ -185,8 +187,9 @@
     (modify-syntax-entry ?# "<" table)
     ;; newline finishes comment line
     (modify-syntax-entry ?\n ">" table)
-    ;; / is used in path names which we want to treat as an entire word
+    ;; / and + is used in path names which we want to treat as an entire word
     (modify-syntax-entry ?/ "w" table)
+    (modify-syntax-entry ?+ "w" table)
     table))
 
 ;; TODO - make a lot smarter than just keywords - complete paths from the
