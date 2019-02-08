@@ -97,21 +97,21 @@
                                      "sigpending" "nproc" "rtprio" "cpu"
                                      "nice"))
 
-(defvar apparmor-mode-include-regexp "\\(#?include\\)\\s-+\\([<\"][[:graph:]]+[\">]\\)")
+(defvar apparmor-mode-include-regexp "^\\s-*\\(#?include\\)\\s-+\\([<\"][[:graph:]]+[\">]?\\)")
 
 (defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]]+}")
 
 (defvar apparmor-mode-variable-regexp
   (concat "^\\s-*\\(" apparmor-mode-variable-name-regexp "\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$"))
 
-(defvar apparmor-mode-profile-name-regexp "[[:word:]/_-]+")
+(defvar apparmor-mode-profile-name-regexp "[[:graph:]/_-]+")
 
 (defvar apparmor-mode-profile-regexp
   (concat "^\\s-*\\(\\^?" apparmor-mode-profile-name-regexp "\\)\\s-+{\\s-*$"))
 
 (defvar apparmor-mode-file-rule-regexp
   (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)?"
-          "\\([][[:word:]/@{}*.,_-]+\\)\\s-+\\([CPUacilmpruwx]+\\)\\s-*"
+          "\\([[:graph:]]+\\)\\s-+\\([CPUacilmpruwx]+\\)\\s-*"
           "\\(->\\s-*\\(" apparmor-mode-profile-name-regexp "\\)\\)?\\s-*"
           ","))
 
