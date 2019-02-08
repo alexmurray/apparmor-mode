@@ -192,16 +192,34 @@
     (modify-syntax-entry ?+ "w" table)
     table))
 
+(defun apparmor-mode-complete-include (prefix &optional local)
+  "Return list of completions of include for PREFIX which could be LOCAL."
+  (let* ((file-name (file-name-base prefix))
+         (parent (file-name-directory prefix))
+         (directory (concat (if local default-directory "/etc/apparmor.d") "/"
+                            parent)))
+    ;; need to prepend all of directory part of prefix
+    (mapcar #'(lambda (f) (concat parent f))
+            (file-name-all-completions file-name directory))))
+
 ;; TODO - make a lot smarter than just keywords - complete paths from the
 ;; system if we look like a path, do sub-completion based on the current lines
 ;; keyword etc - ie match against syntax highlighting regexes and use those to
 ;; further complete etc
 (defun apparmor-mode-completion-at-point ()
   "`completion-at-point' function for apparmor-mode."
-  (let ((bounds (bounds-of-thing-at-point 'symbol)))
+  (let ((prefix (or (thing-at-point 'word t) ""))
+        (bounds (bounds-of-thing-at-point 'word))
+        (bol (save-excursion (beginning-of-line) (point)))
+        (candidates nil))
+    (setq candidates
+          (cond ((looking-back "#?include\\s-+\\([<\"]\\)[[:graph:]]*" bol)
+                 (apparmor-mode-complete-include
+                  prefix (string= (match-string 1) "\"")))
+                (t apparmor-mode-keywords)))
     (list (car bounds) ; start
           (cdr bounds) ; end
-          apparmor-mode-keywords
+          candidates
           :company-docsig #'identity)))
 
 (defun apparmor-mode-indent-line ()
