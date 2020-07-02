@@ -277,7 +277,11 @@
 (with-eval-after-load 'flycheck
   (flycheck-define-checker apparmor
   "A checker using apparmor_parser. "
-  :command ("apparmor_parser" "-Q" "-K" source)
+  :command ("apparmor_parser"
+            "-Q" ;; skip kernel load
+            "-K" ;; skip cache
+            "-T" ;; skip read cache
+            source)
   :error-patterns ((error line-start "AppArmor parser error for " (file-name)
                           " in " (file-name) " at line " line ": " (message)
                            line-end))
