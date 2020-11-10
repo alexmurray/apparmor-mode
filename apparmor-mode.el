@@ -103,18 +103,19 @@
                                      "sigpending" "nproc" "rtprio" "cpu"
                                      "nice"))
 
-(defvar apparmor-mode-abi-regexp "^\\s-*\\(#?abi\\)\\s-+\\([<\"][[:graph:]]+[\">]?\\)")
+(defvar apparmor-mode-abi-regexp "^\\s-*\\(#?abi\\)\\s-+\\([<\"][[:graph:]]+[\">]\\)")
 
-(defvar apparmor-mode-include-regexp "^\\s-*\\(#?include\\( if exists\\)?\\)\\s-+\\([<\"][[:graph:]]+[\">]?\\)")
+(defvar apparmor-mode-include-regexp "^\\s-*\\(#?include\\( if exists\\)?\\)\\s-+\\([<\"][[:graph:]]+[\">]\\)")
 
 (defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]]+}")
 
 (defvar apparmor-mode-variable-regexp
-  (concat "^\\s-*\\(" apparmor-mode-variable-name-regexp "\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$"))
+  (concat "^\\s-*\\(" apparmor-mode-variable-name-regexp "\\)\\s-*\\(\\+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$"))
 
 (defvar apparmor-mode-profile-name-regexp "[[:alnum:]]+")
 
-(defvar apparmor-mode-profile-attachment-regexp "[[:graph:]/_{},-]+")
+(defvar apparmor-mode-profile-attachment-regexp "[[:alnum:]*@/_{},-]+")
+
 (defvar apparmor-mode-profile-flags-regexp
   (concat  "\\(flags\\)=(\\(" (regexp-opt apparmor-mode-profile-flags) "\\s-*\\)*)") )
 
@@ -122,20 +123,20 @@
   (concat "^\\s-*\\(\\(profile\\)\\s-+\\(\\(" apparmor-mode-profile-name-regexp "\\)\\s-+\\)?\\)?\\(\\^?" apparmor-mode-profile-attachment-regexp "\\)\\(\\s-+" apparmor-mode-profile-flags-regexp "\\)?\\s-+{\\s-*$"))
 
 (defvar apparmor-mode-file-rule-regexp
-  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)?"
+  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*"
           "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-+\\([CPUacilmpruwx]+\\)\\s-*"
-          "\\(->\\s-*\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
+          "\\(->\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
           ","))
 
 (defvar apparmor-mode-network-rule-regexp
   (concat
-   "^\\s-*\\(\\(audit\\|quiet\\|deny\\)\\s-+\\)?network\\s-*"
+   "^\\s-*\\(\\(audit\\|quiet\\|deny\\)\\s-+\\)*network\\s-*"
    "\\(" (regexp-opt apparmor-mode-network-permissions 'words) "\\)?\\s-*"
    "\\(" (regexp-opt apparmor-mode-network-domains 'words) "\\)?\\s-*"
    "\\(" (regexp-opt apparmor-mode-network-types 'words) "\\)?\\s-*"
    "\\(" (regexp-opt apparmor-mode-network-protocols 'words) "\\)?\\s-*"
    ;; TODO: address expression
-   "\\(delegate\\s+to\\s+\\(" apparmor-mode-profile-name-regexp "\\)\\)?\\s-*"
+   "\\(delegate to\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
    ","))
 
 (defvar apparmor-mode-dbus-rule-regexp
@@ -188,6 +189,8 @@
      (,apparmor-mode-profile-regexp 5 font-lock-variable-name-face t t)
      ;; file rules
      (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t)
+     (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t) ; permissions
+     (,apparmor-mode-file-rule-regexp 5 font-lock-function-name-face t t) ; profile
      ;; dbus rules
      (,apparmor-mode-dbus-rule-regexp 4 font-lock-variable-name-face t) ;bus
      (,apparmor-mode-dbus-rule-regexp 5 font-lock-constant-face t) ;system/session
