@@ -87,7 +87,7 @@
                                         "bridge" "atmpvc" "x25" "inet6" "rose"
                                         "netbeui" "security" "key" "packet"
                                         "ash" "econet" "atmsvc" "sna" "irda"
-                                        "pppox" "wanpipe" "bluetooth"))
+                                        "pppox" "wanpipe" "bluetooth" "unix"))
 
 (defvar apparmor-mode-network-types '("stream" "dgram" "seqpacket" "raw" "rdm"
                                       "packet" "dccp"))
