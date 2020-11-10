@@ -54,10 +54,15 @@
   :group 'apparmor-mode)
 
 (defvar apparmor-mode-keywords '("audit" "capability" "chmod" "delegate" "dbus"
-                                 "deny" "include" "include if exists" "link"
+                                 "deny" "flags" "include" "include if exists" "link"
                                  "mount" "network" "on" "owner" "pivot_root"
                                  "profile" "quiet" "remount" "rlimit" "safe"
                                  "subset" "to" "umount" "unsafe"))
+
+(defvar apparmor-mode-profile-flags '("enforce" "complain" "debug" "kill"
+                                      "chroot_relative" "namespace_relative"
+                                      "attach_disconnected" "no_attach_disconnected"
+                                      "chroot_attach" "chroot_no_attach"))
 
 (defvar apparmor-mode-capabilities '("audit_control" "audit_write" "chown"
                                      "dac_override" "dac_read_search" "fowner"
@@ -110,9 +115,11 @@
 (defvar apparmor-mode-profile-name-regexp "[[:alnum:]]+")
 
 (defvar apparmor-mode-profile-attachment-regexp "[[:graph:]/_{},-]+")
+(defvar apparmor-mode-profile-flags-regexp
+  (concat  "\\(flags\\)=(\\(" (regexp-opt apparmor-mode-profile-flags) "\\s-*\\)*)") )
 
 (defvar apparmor-mode-profile-regexp
-  (concat "^\\s-*\\(\\(profile\\)\\s-+\\(" apparmor-mode-profile-name-regexp "\\)?\\)?\\s-*\\(\\^?" apparmor-mode-profile-attachment-regexp "\\)\\s-+{\\s-*$"))
+  (concat "^\\s-*\\(\\(profile\\)\\s-+\\(\\(" apparmor-mode-profile-name-regexp "\\)\\s-+\\)?\\)?\\(\\^?" apparmor-mode-profile-attachment-regexp "\\)\\(\\s-+" apparmor-mode-profile-flags-regexp "\\)?\\s-+{\\s-*$"))
 
 (defvar apparmor-mode-file-rule-regexp
   (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)?"
@@ -177,8 +184,8 @@
      ;; variables
      (,apparmor-mode-variable-name-regexp 0 font-lock-variable-name-face t)
      ;; profiles
-     (,apparmor-mode-profile-regexp 2 font-lock-keyword-face t)
-     (,apparmor-mode-profile-regexp 3 font-lock-function-name-face t)
+     (,apparmor-mode-profile-regexp 4 font-lock-function-name-face t t)
+     (,apparmor-mode-profile-regexp 5 font-lock-variable-name-face t t)
      ;; file rules
      (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t)
      ;; dbus rules
