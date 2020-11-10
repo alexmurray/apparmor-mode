@@ -171,10 +171,7 @@
      (",\\s-*$" . 'font-lock-builtin-face)
      ;; TODO be more specific about where these are valid
      ("->" . 'font-lock-builtin-face)
-     ("=" . 'font-lock-builtin-face)
-     ("+" . 'font-lock-builtin-face)
-     ("(" . 'font-lock-builtin-face)
-     (")" . 'font-lock-builtin-face)
+     ("[=\\+()]" . 'font-lock-builtin-face)
      ("+=" . 'font-lock-builtin-face)
      ("<=" . 'font-lock-builtin-face) ; rlimit
      ;; abi
