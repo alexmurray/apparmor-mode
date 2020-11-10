@@ -107,6 +107,10 @@
 
 (defvar apparmor-mode-include-regexp "^\\s-*\\(#?include\\( if exists\\)?\\)\\s-+\\([<\"][[:graph:]]+[\">]\\)")
 
+(defvar apparmor-mode-capability-regexp (concat  "^\\s-*\\(capability\\)\\s-+\\("
+                                                 (regexp-opt apparmor-mode-capabilities)
+                                                 "\\s-*\\)*"))
+
 (defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]]+}")
 
 (defvar apparmor-mode-variable-regexp
@@ -162,7 +166,6 @@
 
 (defvar apparmor-mode-font-lock-defaults
   `(((,(regexp-opt apparmor-mode-keywords 'words) . font-lock-keyword-face)
-     (,(regexp-opt apparmor-mode-capabilities 'words) . font-lock-type-face)
      (,(regexp-opt apparmor-mode-network-permissions 'words) . font-lock-type-face)
      (,(regexp-opt apparmor-mode-network-domains 'words) . font-lock-type-face)
      (,(regexp-opt apparmor-mode-network-types 'words) . font-lock-type-face)
@@ -187,6 +190,8 @@
      ;; profiles
      (,apparmor-mode-profile-regexp 4 font-lock-function-name-face t t)
      (,apparmor-mode-profile-regexp 5 font-lock-variable-name-face t t)
+     ;; capabilities
+     (,apparmor-mode-capability-regexp 2 font-lock-type-face t)
      ;; file rules
      (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t)
      (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t) ; permissions
