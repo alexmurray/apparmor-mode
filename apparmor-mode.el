@@ -166,10 +166,6 @@
 
 (defvar apparmor-mode-font-lock-defaults
   `(((,(regexp-opt apparmor-mode-keywords 'words) . font-lock-keyword-face)
-     (,(regexp-opt apparmor-mode-network-permissions 'words) . font-lock-type-face)
-     (,(regexp-opt apparmor-mode-network-domains 'words) . font-lock-type-face)
-     (,(regexp-opt apparmor-mode-network-types 'words) . font-lock-type-face)
-     (,(regexp-opt apparmor-mode-dbus-permissions 'words) . font-lock-type-face)
      (,(regexp-opt apparmor-mode-rlimit-types 'words) . font-lock-type-face)
      ;; comma at end-of-line
      (",\\s-*$" . 'font-lock-builtin-face)
@@ -193,9 +189,13 @@
      ;; capabilities
      (,apparmor-mode-capability-regexp 2 font-lock-type-face t)
      ;; file rules
-     (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t)
      (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t) ; permissions
      (,apparmor-mode-file-rule-regexp 5 font-lock-function-name-face t t) ; profile
+     ;; network rules
+     (,apparmor-mode-network-rule-regexp 3 font-lock-constant-face t t) ;permissions
+     (,apparmor-mode-network-rule-regexp 4 font-lock-function-name-face t t) ;domain
+     (,apparmor-mode-network-rule-regexp 5 font-lock-variable-name-face t t) ;type
+     (,apparmor-mode-network-rule-regexp 6 font-lock-type-face t t) ; protocol
      ;; dbus rules
      (,apparmor-mode-dbus-rule-regexp 4 font-lock-variable-name-face t) ;bus
      (,apparmor-mode-dbus-rule-regexp 5 font-lock-constant-face t) ;system/session
