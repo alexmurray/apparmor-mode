@@ -54,9 +54,10 @@
   :group 'apparmor-mode)
 
 (defvar apparmor-mode-keywords '("audit" "capability" "chmod" "delegate" "dbus"
-                                 "deny" "include" "link" "mount" "network" "on"
-                                 "owner" "pivot_root" "quiet" "remount" "rlimit"
-                                 "safe" "subset" "to" "umount" "unsafe"))
+                                 "deny" "include" "include if exists" "link"
+                                 "mount" "network" "on" "owner" "pivot_root"
+                                 "profile" "quiet" "remount" "rlimit" "safe"
+                                 "subset" "to" "umount" "unsafe"))
 
 (defvar apparmor-mode-capabilities '("audit_control" "audit_write" "chown"
                                      "dac_override" "dac_read_search" "fowner"
@@ -65,7 +66,7 @@
                                      "mac_override" "mknod" "net_admin"
                                      "net_bind_service" "net_broadcast"
                                      "net_raw" "setfcap" "setgid" "setpcap"
-                                     "setuid" "sys_admin" "sys_boot"
+                                     "setuid" "syslog" "sys_admin" "sys_boot"
                                      "sys_chroot" "sys_module" "sys_nice"
                                      "sys_pacct" "sys_ptrace" "sys_rawio"
                                      "sys_resource" "sys_time"
@@ -97,22 +98,26 @@
                                      "sigpending" "nproc" "rtprio" "cpu"
                                      "nice"))
 
-(defvar apparmor-mode-include-regexp "^\\s-*\\(#?include\\)\\s-+\\([<\"][[:graph:]]+[\">]?\\)")
+(defvar apparmor-mode-abi-regexp "^\\s-*\\(#?abi\\)\\s-+\\([<\"][[:graph:]]+[\">]?\\)")
+
+(defvar apparmor-mode-include-regexp "^\\s-*\\(#?include\\( if exists\\)?\\)\\s-+\\([<\"][[:graph:]]+[\">]?\\)")
 
 (defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]]+}")
 
 (defvar apparmor-mode-variable-regexp
   (concat "^\\s-*\\(" apparmor-mode-variable-name-regexp "\\)\\s-*\\(+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$"))
 
-(defvar apparmor-mode-profile-name-regexp "[[:graph:]/_-]+")
+(defvar apparmor-mode-profile-name-regexp "[[:alnum:]]+")
+
+(defvar apparmor-mode-profile-attachment-regexp "[[:graph:]/_{},-]+")
 
 (defvar apparmor-mode-profile-regexp
-  (concat "^\\s-*\\(\\^?" apparmor-mode-profile-name-regexp "\\)\\s-+{\\s-*$"))
+  (concat "^\\s-*\\(\\(profile\\)\\s-+\\(" apparmor-mode-profile-name-regexp "\\)?\\)?\\s-*\\(\\^?" apparmor-mode-profile-attachment-regexp "\\)\\s-+{\\s-*$"))
 
 (defvar apparmor-mode-file-rule-regexp
   (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)?"
-          "\\([[:graph:]]+\\)\\s-+\\([CPUacilmpruwx]+\\)\\s-*"
-          "\\(->\\s-*\\(" apparmor-mode-profile-name-regexp "\\)\\)?\\s-*"
+          "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-+\\([CPUacilmpruwx]+\\)\\s-*"
+          "\\(->\\s-*\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
           ","))
 
 (defvar apparmor-mode-network-rule-regexp
@@ -163,16 +168,19 @@
      ("+" . 'font-lock-builtin-face)
      ("+=" . 'font-lock-builtin-face)
      ("<=" . 'font-lock-builtin-face) ; rlimit
+     ;; abi
+     (,apparmor-mode-abi-regexp 1 font-lock-preprocessor-face t)
+     (,apparmor-mode-abi-regexp 2 font-lock-string-face t)
      ;; includes
      (,apparmor-mode-include-regexp 1 font-lock-preprocessor-face t)
-     (,apparmor-mode-include-regexp 2 font-lock-string-face t)
+     (,apparmor-mode-include-regexp 3 font-lock-string-face t)
      ;; variables
      (,apparmor-mode-variable-name-regexp 0 font-lock-variable-name-face t)
      ;; profiles
-     (,apparmor-mode-profile-regexp 1 font-lock-function-name-face t)
+     (,apparmor-mode-profile-regexp 2 font-lock-keyword-face t)
+     (,apparmor-mode-profile-regexp 3 font-lock-function-name-face t)
      ;; file rules
      (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t)
-     (,apparmor-mode-file-rule-regexp 6 font-lock-function-name-face t)
      ;; dbus rules
      (,apparmor-mode-dbus-rule-regexp 4 font-lock-variable-name-face t) ;bus
      (,apparmor-mode-dbus-rule-regexp 5 font-lock-constant-face t) ;system/session
