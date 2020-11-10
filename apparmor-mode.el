@@ -290,7 +290,7 @@
   (setq font-lock-defaults apparmor-mode-font-lock-defaults)
   (set (make-local-variable 'indent-line-function) #'apparmor-mode-indent-line)
   (add-to-list 'completion-at-point-functions #'apparmor-mode-completion-at-point)
-  (setq imenu-generic-expression `(("Profiles" ,apparmor-mode-profile-regexp 1)))
+  (setq imenu-generic-expression `(("Profiles" ,apparmor-mode-profile-regexp 5)))
   (setq comment-start "#")
   (setq comment-end ""))
 
