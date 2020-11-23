@@ -44,7 +44,11 @@
 
 ;;; Code:
 
-(defgroup apparmor-mode nil
+;; for flycheck integration
+(declare-function flycheck-define-checker "ext:flycheck.el")
+(defvar flycheck-checkers)
+
+(defgroup apparmor nil
   "Major mode for editing AppArmor policies."
   :group 'tools)
 
@@ -296,18 +300,18 @@
 ;;(add-to-list 'auto-mode-alist '("\\.apparmor\\'" . apparmor-mode))
 
 ;; flycheck integration
-(with-eval-after-load 'flycheck
+(when (require 'flycheck nil t)
   (flycheck-define-checker apparmor
-  "A checker using apparmor_parser. "
-  :command ("apparmor_parser"
-            "-Q" ;; skip kernel load
-            "-K" ;; skip cache
-            "-T" ;; skip read cache
-            source)
-  :error-patterns ((error line-start "AppArmor parser error for " (file-name)
-                          " in " (file-name) " at line " line ": " (message)
-                           line-end))
-  :modes apparmor-mode)
+    "A checker using apparmor_parser. "
+    :command ("apparmor_parser"
+              "-Q" ;; skip kernel load
+              "-K" ;; skip cache
+              "-T" ;; skip read cache
+              source)
+    :error-patterns ((error line-start "AppArmor parser error for " (file-name)
+                            " in " (file-name) " at line " line ": " (message)
+                            line-end))
+    :modes apparmor-mode)
 
   (add-to-list 'flycheck-checkers 'apparmor t))
 
