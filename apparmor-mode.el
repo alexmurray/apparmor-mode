@@ -296,8 +296,7 @@
   (setq comment-end ""))
 
 ;;;###autoload
-;; todo - files in /etc/apparmor.d/ should use this syntax perhaps?
-;;(add-to-list 'auto-mode-alist '("\\.apparmor\\'" . apparmor-mode))
+(add-to-list 'auto-mode-alist '("\\`/etc/apparmor\\.d/" . apparmor-mode))
 
 ;; flycheck integration
 (when (require 'flycheck nil t)
