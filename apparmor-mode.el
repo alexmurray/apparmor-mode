@@ -53,7 +53,7 @@
   :group 'tools)
 
 (defcustom apparmor-mode-indent-offset 2
-  "Indentation offset in apparmor-mode buffers."
+  "Indentation offset in `apparmor-mode' buffers."
   :type 'integer
   :group 'apparmor)
 
@@ -233,7 +233,7 @@
 ;; keyword etc - ie match against syntax highlighting regexes and use those to
 ;; further complete etc
 (defun apparmor-mode-completion-at-point ()
-  "`completion-at-point' function for apparmor-mode."
+  "`completion-at-point' function for `apparmor-mode'."
   (let ((prefix (or (thing-at-point 'word t) ""))
         (bounds (bounds-of-thing-at-point 'word))
         (bol (save-excursion (beginning-of-line) (point)))
@@ -249,7 +249,7 @@
           :company-docsig #'identity)))
 
 (defun apparmor-mode-indent-line ()
-  "Indent current line in apparmor-mode."
+  "Indent current line in `apparmor-mode'."
   (interactive)
   (if (bolp)
       (apparmor-mode--indent-line)
@@ -257,7 +257,7 @@
       (apparmor-mode--indent-line))))
 
 (defun apparmor-mode--indent-line ()
-  "Indent current line in apparmor-mode."
+  "Indent current line in `apparmor-mode'."
   (beginning-of-line)
   (cond
    ((bobp)
