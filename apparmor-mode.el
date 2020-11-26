@@ -1,4 +1,4 @@
-;;; apparmor-mode.el --- major mode for editing AppArmor policy files         -*- lexical-binding: t; -*-
+;;; apparmor-mode.el --- Major mode for editing AppArmor policy files         -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2018 Alex Murray
 
