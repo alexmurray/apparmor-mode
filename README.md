@@ -14,7 +14,7 @@ Provides an enhanced editing environment for AppArmor policy files within Emacs,
 
 ## Installation
 
-### MELPA (coming soon...)
+### MELPA [(coming soon...)](https://github.com/melpa/melpa/pull/7251)
 
 The preferred way to install `apparmor-mode` is via
 [MELPA](http://melpa.org) - then you can just <kbd>M-x package-install RET
