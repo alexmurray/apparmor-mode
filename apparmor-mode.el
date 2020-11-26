@@ -285,6 +285,7 @@
                         ;; default case, indent the same as previous line
                         (current-indentation))))))))
 
+;;;###autoload
 (define-derived-mode apparmor-mode prog-mode "aa"
   "apparmor-mode is a major mode for editing AppArmor profiles."
   :syntax-table apparmor-mode-syntax-table
