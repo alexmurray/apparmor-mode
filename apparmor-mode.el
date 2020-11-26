@@ -55,7 +55,7 @@
 (defcustom apparmor-mode-indent-offset 2
   "Indentation offset in apparmor-mode buffers."
   :type 'integer
-  :group 'apparmor-mode)
+  :group 'apparmor)
 
 (defvar apparmor-mode-keywords '("audit" "capability" "chmod" "delegate" "dbus"
                                  "deny" "flags" "include" "include if exists" "link"
