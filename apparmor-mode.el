@@ -45,7 +45,9 @@
 ;;; Code:
 
 ;; for flycheck integration
-(declare-function flycheck-define-checker "ext:flycheck.el")
+(declare-function flycheck-define-command-checker "ext:flycheck.el"
+                  (symbol docstring &rest properties))
+(declare-function flycheck-valid-checker-p "ext:flycheck.el")
 (defvar flycheck-checkers)
 
 (defgroup apparmor nil
@@ -294,26 +296,27 @@
   (add-to-list 'completion-at-point-functions #'apparmor-mode-completion-at-point)
   (setq imenu-generic-expression `(("Profiles" ,apparmor-mode-profile-regexp 5)))
   (setq comment-start "#")
-  (setq comment-end ""))
+  (setq comment-end "")
+  (when (require 'flycheck nil t)
+    (unless (flycheck-valid-checker-p 'apparmor)
+      (flycheck-define-command-checker 'apparmor
+        "A checker using apparmor_parser. "
+        :command '("apparmor_parser"
+                  "-Q" ;; skip kernel load
+                  "-K" ;; skip cache
+                  "-T" ;; skip read cache
+                  source)
+        :error-patterns '((error line-start "AppArmor parser error for " (file-name)
+                                " in " (file-name) " at line " line ": " (message)
+                                line-end))
+        :modes '(apparmor-mode)))
+    (add-to-list 'flycheck-checkers 'apparmor t)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\`/etc/apparmor\\.d/" . apparmor-mode))
 
 ;; flycheck integration
-(when (require 'flycheck nil t)
-  (flycheck-define-checker apparmor
-    "A checker using apparmor_parser. "
-    :command ("apparmor_parser"
-              "-Q" ;; skip kernel load
-              "-K" ;; skip cache
-              "-T" ;; skip read cache
-              source)
-    :error-patterns ((error line-start "AppArmor parser error for " (file-name)
-                            " in " (file-name) " at line " line ": " (message)
-                            line-end))
-    :modes apparmor-mode)
 
-  (add-to-list 'flycheck-checkers 'apparmor t))
 
 (provide 'apparmor-mode)
 ;;; apparmor-mode.el ends here
