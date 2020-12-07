@@ -21,7 +21,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -227,7 +227,7 @@
          (directory (concat (if local default-directory "/etc/apparmor.d") "/"
                             parent)))
     ;; need to prepend all of directory part of prefix
-    (mapcar #'(lambda (f) (concat parent f))
+    (mapcar (lambda (f) (concat parent f))
             (file-name-all-completions file-name directory))))
 
 ;; TODO - make a lot smarter than just keywords - complete paths from the
@@ -277,7 +277,7 @@
                       ;; keep going backwards until we have a line with actual
                       ;; content since blank lines don't count
                       (while (and (looking-at "^\\s-*$")
-                                  (> (point) (point-min)))
+                                  (not (bobp)))
                         (forward-line -1))
                       (cond
                        ((looking-at "\\(^.*{[^}]*$\\)")
