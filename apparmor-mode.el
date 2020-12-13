@@ -313,7 +313,9 @@
     (add-to-list 'flycheck-checkers 'apparmor t)))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("/apparmor\\.d/" . apparmor-mode))
+(add-to-list 'auto-mode-alist '("\\`/etc/apparmor\\.d/" . apparmor-mode))
+
+;; flycheck integration
 
 
 (provide 'apparmor-mode)
