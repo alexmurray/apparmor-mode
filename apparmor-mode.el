@@ -306,8 +306,13 @@
                   "-K" ;; skip cache
                   "-T" ;; skip read cache
                   source)
-        :error-patterns '((error line-start "AppArmor parser error for " (file-name)
-                                " in " (file-name) " at line " line ": " (message)
+        :error-patterns '((error line-start "AppArmor parser error at line "
+                                 line ": " (message)
+                                line-end)
+                          (error line-start "AppArmor parser error for "
+                                 (one-or-more not-newline)
+                                 " in profile " (file-name)
+                                 " at line " line ": " (message)
                                 line-end))
         :modes '(apparmor-mode)))
     (add-to-list 'flycheck-checkers 'apparmor t)))
