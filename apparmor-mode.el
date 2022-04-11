@@ -322,8 +322,6 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\`/var/lib/snapd/apparmor/profiles/" . apparmor-mode))
 
-;; flycheck integration
-
 
 (provide 'apparmor-mode)
 ;;; apparmor-mode.el ends here
