@@ -317,6 +317,73 @@
         :modes '(apparmor-mode)))
     (add-to-list 'flycheck-checkers 'apparmor t)))
 
+;; flymake integration
+(defvar-local apparmor-mode--flymake-proc nil)
+
+(defun apparmor-mode-flymake (report-fn &rest _args)
+  "`flymake' backend function for `apparmor-mode' to report errors via REPORT-FN."
+  ;; disable if apparmor_parser is not available
+  (unless (executable-find "apparmor_parser")
+    (error "Cannot find apparmor_parser"))
+
+  ;; kill any existing running instance
+  (when (process-live-p apparmor-mode--flymake-proc)
+    (kill-process apparmor-mode--flymake-proc))
+
+  (let ((source (current-buffer)))
+    (save-restriction
+      (widen)
+      ;; Reset the `apparmor-mode--flymake-proc' process to a new process
+      ;; calling check-syntax.
+      (setq
+       apparmor-mode--flymake-proc
+       (make-process
+        :name "apparmor-mode-flymake" :noquery t :connection-type 'pipe
+        ;; Make output go to a temporary buffer.
+        :buffer (generate-new-buffer " *apparmor-mode-flymake*")
+        :command '("apparmor_parser" "-Q" "-K" "-T" "/dev/stdin")
+        :sentinel
+        (lambda (proc _event)
+          (when (memq (process-status proc) '(exit signal))
+            (unwind-protect
+                ;; Only proceed if `proc' is the same as
+                ;; `apparmor-mode--flymake-proc', which indicates that
+                ;; `proc' is not an obsolete process.
+                ;;
+                (if (with-current-buffer source (eq proc apparmor-mode--flymake-proc))
+                    (with-current-buffer (process-buffer proc)
+                      (goto-char (point-min))
+                      ;; Parse the output buffer for diagnostic's
+                      ;; messages and locations, collect them in a list
+                      ;; of objects, and call `report-fn'.
+                      ;;
+                      (cl-loop
+                       while (search-forward-regexp
+                              "^\\(AppArmor parser error \\(?:for /dev/stdin in profile .*\\)?at line \\)\\([0-9]+\\): \\(.*\\)$"
+                              nil t)
+                       for msg = (match-string 3)
+                       for (beg . end) = (flymake-diag-region
+                                          source
+                                          (string-to-number (match-string 2)))
+                       for type = :error
+                       collect (flymake-make-diagnostic source beg end type msg)
+                       into diags
+                       finally (funcall report-fn diags)))
+                  (flymake-log :warning "Canceling obsolete check %s" proc))
+              ;; Cleanup the temporary buffer used to hold the
+              ;; check's output.
+              (kill-buffer (process-buffer proc)))))))
+      (process-send-region apparmor-mode--flymake-proc (point-min) (point-max))
+      (process-send-eof apparmor-mode--flymake-proc))))
+
+;;;###autoload
+(defun apparmor-mode-setup-flymake-backend ()
+  "Setup the `flymake' backend for `apparmor-mode'."
+  (add-hook 'flymake-diagnostic-functions 'apparmor-mode-flymake nil t))
+
+;;;###autoload
+(add-hook 'apparmor-mode-hook 'apparmor-mode-setup-flymake-backend)
+
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\`/etc/apparmor\\.d/" . apparmor-mode))
 ;;;###autoload
