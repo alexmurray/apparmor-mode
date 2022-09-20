@@ -292,7 +292,7 @@
   "apparmor-mode is a major mode for editing AppArmor profiles."
   :syntax-table apparmor-mode-syntax-table
   (setq font-lock-defaults apparmor-mode-font-lock-defaults)
-  (set (make-local-variable 'indent-line-function) #'apparmor-mode-indent-line)
+  (setq-local indent-line-function #'apparmor-mode-indent-line)
   (add-to-list 'completion-at-point-functions #'apparmor-mode-completion-at-point)
   (setq imenu-generic-expression `(("Profiles" ,apparmor-mode-profile-regexp 5)))
   (setq comment-start "#")
