@@ -288,7 +288,7 @@
                         (current-indentation))))))))
 
 ;;;###autoload
-(define-derived-mode apparmor-mode prog-mode "aa"
+(define-derived-mode apparmor-mode prog-mode "AppArmor"
   "apparmor-mode is a major mode for editing AppArmor profiles."
   :syntax-table apparmor-mode-syntax-table
   (setq font-lock-defaults apparmor-mode-font-lock-defaults)
