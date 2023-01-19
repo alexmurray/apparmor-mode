@@ -5,7 +5,7 @@
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/apparmor-mode
-;; Version: 0.3
+;; Version: 0.4
 ;; Package-Requires: ((emacs "26.1"))
 
 ;; This file is not part of GNU Emacs.
@@ -35,7 +35,6 @@
 ;;   - not (ie just a subset?)  if we use regexps above then
 ;;   - should probably keep full regexps here so can reuse
 ;; - expand highlighting of mount rules (options=...) similar to dbus
-;; - add flymake support via "apparmor_parser -Q -K </path/to/profile>"
 ;; - add tests via ert etc
 
 ;;;; Setup
