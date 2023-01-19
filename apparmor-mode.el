@@ -304,7 +304,6 @@
         :command '("apparmor_parser"
                   "-Q" ;; skip kernel load
                   "-K" ;; skip cache
-                  "-T" ;; skip read cache
                   source)
         :error-patterns '((error line-start "AppArmor parser error at line "
                                  line ": " (message)
@@ -341,7 +340,7 @@
         :name "apparmor-mode-flymake" :noquery t :connection-type 'pipe
         ;; Make output go to a temporary buffer.
         :buffer (generate-new-buffer " *apparmor-mode-flymake*")
-        :command '("apparmor_parser" "-Q" "-K" "-T" "/dev/stdin")
+        :command '("apparmor_parser" "-Q" "-K" "/dev/stdin")
         :sentinel
         (lambda (proc _event)
           (when (memq (process-status proc) '(exit signal))
