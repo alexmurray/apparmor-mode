@@ -5,7 +5,7 @@
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/alexmurray/apparmor-mode
-;; Version: 0.4
+;; Version: 0.5
 ;; Package-Requires: ((emacs "26.1"))
 
 ;; This file is not part of GNU Emacs.
