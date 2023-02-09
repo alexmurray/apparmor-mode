@@ -116,7 +116,7 @@
                                                  (regexp-opt apparmor-mode-capabilities)
                                                  "\\s-*\\)*"))
 
-(defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]]+}")
+(defvar apparmor-mode-variable-name-regexp "@{[[:alpha:]_]+}")
 
 (defvar apparmor-mode-variable-regexp
   (concat "^\\s-*\\(" apparmor-mode-variable-name-regexp "\\)\\s-*\\(\\+?=\\)\\s-*\\([[:graph:]]+\\)\\(\\s-+\\([[:graph:]]+\\)\\)?\\s-*\\(#.*\\)?$"))
@@ -170,8 +170,8 @@
    ","))
 
 (defvar apparmor-mode-font-lock-defaults
-  `(((,(regexp-opt apparmor-mode-keywords 'words) . font-lock-keyword-face)
-     (,(regexp-opt apparmor-mode-rlimit-types 'words) . font-lock-type-face)
+  `(((,(regexp-opt apparmor-mode-keywords 'symbols) . font-lock-keyword-face)
+     (,(regexp-opt apparmor-mode-rlimit-types 'symbols) . font-lock-type-face)
      ;; comma at end-of-line
      (",\\s-*$" . 'font-lock-builtin-face)
      ;; TODO be more specific about where these are valid
