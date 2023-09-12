@@ -58,16 +58,18 @@
   :type 'integer
   :group 'apparmor)
 
-(defvar apparmor-mode-keywords '("audit" "capability" "chmod" "delegate" "dbus"
-                                 "deny" "flags" "include" "include if exists" "link"
-                                 "mount" "network" "on" "owner" "pivot_root"
-                                 "profile" "quiet" "remount" "rlimit" "safe"
-                                 "subset" "to" "umount" "unsafe"))
+(defvar apparmor-mode-keywords '("all" "audit" "capability" "chmod" "delegate"
+                                 "dbus" "deny" "flags" "io_uring" "include"
+                                 "include if exists" "link" "mount" "mqueue"
+                                 "network" "on" "owner" "pivot_root" "profile"
+                                 "quiet" "remount" "rlimit" "safe" "subset" "to"
+                                 "umount" "unsafe" "userns"))
 
 (defvar apparmor-mode-profile-flags '("enforce" "complain" "debug" "kill"
                                       "chroot_relative" "namespace_relative"
                                       "attach_disconnected" "no_attach_disconnected"
-                                      "chroot_attach" "chroot_no_attach"))
+                                      "chroot_attach" "chroot_no_attach"
+                                      "unconfined"))
 
 (defvar apparmor-mode-capabilities '("audit_control" "audit_write" "chown"
                                      "dac_override" "dac_read_search" "fowner"
@@ -86,7 +88,8 @@
                                             "listen" "read" "write" "send"
                                             "receive" "getsockname" "getpeername"
                                             "getsockopt" "setsockopt" "fcntl"
-                                            "ioctl" "shutdown" "getpeersec"))
+                                            "ioctl" "shutdown" "getpeersec"
+                                            "sqpoll" "override_creds"))
 
 (defvar apparmor-mode-network-domains '("inet" "ax25" "ipx" "appletalk" "netrom"
                                         "bridge" "atmpvc" "x25" "inet6" "rose"
