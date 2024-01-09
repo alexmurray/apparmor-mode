@@ -134,9 +134,19 @@
 (defvar apparmor-mode-profile-regexp
   (concat "^\\s-*\\(\\(profile\\)\\s-+\\(\\(" apparmor-mode-profile-name-regexp "\\)\\s-+\\)?\\)?\\(\\^?" apparmor-mode-profile-attachment-regexp "\\)\\(\\s-+" apparmor-mode-profile-flags-regexp "\\)?\\s-+{\\s-*$"))
 
-(defvar apparmor-mode-file-rule-regexp
+(defvar apparmor-mode-file-rule-permissions-regexp "[CPUacilmpruwx]+")
+
+(defvar apparmor-mode-file-rule-permissions-prefix-regexp
   (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*"
-          "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-+\\([CPUacilmpruwx]+\\)\\s-*"
+          "\\(" apparmor-mode-file-rule-permissions-regexp "\\)\\s-+"
+          "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-*"
+          "\\(->\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
+          ","))
+
+(defvar apparmor-mode-file-rule-permissions-suffix-regexp
+  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*"
+          "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-+"
+          "\\(" apparmor-mode-file-rule-permissions-regexp "\\)\\s-*"
           "\\(->\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
           ","))
 
@@ -191,18 +201,20 @@
      ;; variables
      (,apparmor-mode-variable-name-regexp 0 font-lock-variable-name-face t)
      ;; profiles
-     (,apparmor-mode-profile-regexp 4 font-lock-function-name-face t t)
-     (,apparmor-mode-profile-regexp 5 font-lock-variable-name-face t t)
+     (,apparmor-mode-profile-regexp 4 font-lock-function-name-face t)
+     (,apparmor-mode-profile-regexp 5 font-lock-variable-name-face t)
      ;; capabilities
      (,apparmor-mode-capability-regexp 2 font-lock-type-face t)
      ;; file rules
-     (,apparmor-mode-file-rule-regexp 4 font-lock-constant-face t) ; permissions
-     (,apparmor-mode-file-rule-regexp 5 font-lock-function-name-face t t) ; profile
+     (,apparmor-mode-file-rule-permissions-prefix-regexp 3 font-lock-constant-face t) ; permissions
+     (,apparmor-mode-file-rule-permissions-prefix-regexp 5 font-lock-function-name-face t) ; profile
+     (,apparmor-mode-file-rule-permissions-suffix-regexp 4 font-lock-constant-face t) ; permissions
+     (,apparmor-mode-file-rule-permissions-suffix-regexp 5 font-lock-constant-face t) ; profile
      ;; network rules
-     (,apparmor-mode-network-rule-regexp 3 font-lock-constant-face t t) ;permissions
-     (,apparmor-mode-network-rule-regexp 4 font-lock-function-name-face t t) ;domain
-     (,apparmor-mode-network-rule-regexp 5 font-lock-variable-name-face t t) ;type
-     (,apparmor-mode-network-rule-regexp 6 font-lock-type-face t t) ; protocol
+     (,apparmor-mode-network-rule-regexp 3 font-lock-constant-face t) ;permissions
+     (,apparmor-mode-network-rule-regexp 4 font-lock-function-name-face t) ;domain
+     (,apparmor-mode-network-rule-regexp 5 font-lock-variable-name-face t) ;type
+     (,apparmor-mode-network-rule-regexp 6 font-lock-type-face t) ; protocol
      ;; dbus rules
      (,apparmor-mode-dbus-rule-regexp 4 font-lock-variable-name-face t) ;bus
      (,apparmor-mode-dbus-rule-regexp 5 font-lock-constant-face t) ;system/session
