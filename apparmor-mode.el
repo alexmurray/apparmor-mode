@@ -126,7 +126,7 @@
 
 (defvar apparmor-mode-profile-name-regexp "[[:alnum:]]+")
 
-(defvar apparmor-mode-profile-attachment-regexp "[[:alnum:]*@/_{},-]+")
+(defvar apparmor-mode-profile-attachment-regexp "[][[:alnum:]*@/_{},-.?]+")
 
 (defvar apparmor-mode-profile-flags-regexp
   (concat  "\\(flags\\)=(\\(" (regexp-opt apparmor-mode-profile-flags) "\\s-*\\)*)") )
@@ -134,7 +134,7 @@
 (defvar apparmor-mode-profile-regexp
   (concat "^\\s-*\\(\\(profile\\)\\s-+\\(\\(" apparmor-mode-profile-name-regexp "\\)\\s-+\\)?\\)?\\(\\^?" apparmor-mode-profile-attachment-regexp "\\)\\(\\s-+" apparmor-mode-profile-flags-regexp "\\)?\\s-+{\\s-*$"))
 
-(defvar apparmor-mode-file-rule-permissions-regexp "[CPUacilmpruwx]+")
+(defvar apparmor-mode-file-rule-permissions-regexp "[CPUaciklmpruwx]+")
 
 (defvar apparmor-mode-file-rule-permissions-prefix-regexp
   (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*"
