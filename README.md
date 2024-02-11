@@ -8,13 +8,13 @@ Provides an enhanced editing environment for AppArmor policy files within Emacs,
 
 * Syntax highlighting
 * Keyword completion via [completion-at-point](https://www.gnu.org/software/emacs/manual/html_node/elisp/Completion-in-Buffers.html)
-* [Flycheck](http://www.flycheck.org/) integration for basic on-the-fly syntax validation via [apparmor_parser](http://manpages.ubuntu.com/manpages/xenial/man8/apparmor_parser.8.html)
+* [Flymake](https://www.gnu.org/software/emacs/manual/html_node/emacs/Flymake.html) and [Flycheck](http://www.flycheck.org/) integration for basic on-the-fly syntax validation via [apparmor_parser](http://manpages.ubuntu.com/manpages/xenial/man8/apparmor_parser.8.html)
 
 ![apparmor-mode screenshot](screenshots/apparmor-mode.png)
 
 ## Installation
 
-### MELPA [(coming soon...)](https://github.com/melpa/melpa/pull/7251)
+### MELPA 
 
 The preferred way to install `apparmor-mode` is via
 [MELPA](http://melpa.org) - then you can just <kbd>M-x package-install RET
