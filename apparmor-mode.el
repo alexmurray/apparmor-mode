@@ -193,35 +193,42 @@
      ("+=" . 'font-lock-builtin-face)
      ("<=" . 'font-lock-builtin-face) ; rlimit
      ;; abi
-     (,apparmor-mode-abi-regexp 1 font-lock-preprocessor-face t)
-     (,apparmor-mode-abi-regexp 2 font-lock-string-face t)
+     (,apparmor-mode-abi-regexp
+      (1 font-lock-preprocessor-face t)
+      (2 font-lock-string-face t))
      ;; includes
-     (,apparmor-mode-include-regexp 1 font-lock-preprocessor-face t)
-     (,apparmor-mode-include-regexp 3 font-lock-string-face t)
+     (,apparmor-mode-include-regexp
+      (1 font-lock-preprocessor-face t)
+      (3 font-lock-string-face t))
      ;; variables
      (,apparmor-mode-variable-name-regexp 0 font-lock-variable-name-face t)
      ;; profiles
-     (,apparmor-mode-profile-regexp 4 font-lock-function-name-face t)
-     (,apparmor-mode-profile-regexp 5 font-lock-variable-name-face t)
+     (,apparmor-mode-profile-regexp
+      (4 font-lock-function-name-face t nil)
+      (5 font-lock-variable-name-face t))
      ;; capabilities
      (,apparmor-mode-capability-regexp 2 font-lock-type-face t)
      ;; file rules
-     (,apparmor-mode-file-rule-permissions-prefix-regexp 3 font-lock-constant-face t) ; permissions
-     (,apparmor-mode-file-rule-permissions-prefix-regexp 5 font-lock-function-name-face t) ; profile
-     (,apparmor-mode-file-rule-permissions-suffix-regexp 4 font-lock-constant-face t) ; permissions
-     (,apparmor-mode-file-rule-permissions-suffix-regexp 5 font-lock-constant-face t) ; profile
+     (,apparmor-mode-file-rule-permissions-prefix-regexp
+      (3 font-lock-constant-face t) ; permissions
+      (6 font-lock-function-name-face nil t)) ;profile
+     (,apparmor-mode-file-rule-permissions-suffix-regexp
+      (4 font-lock-constant-face t) ; permissions
+      (6 font-lock-function-name-face nil t)) ;profile
      ;; network rules
-     (,apparmor-mode-network-rule-regexp 3 font-lock-constant-face t) ;permissions
-     (,apparmor-mode-network-rule-regexp 4 font-lock-function-name-face t) ;domain
-     (,apparmor-mode-network-rule-regexp 5 font-lock-variable-name-face t) ;type
-     (,apparmor-mode-network-rule-regexp 6 font-lock-type-face t) ; protocol
+     (,apparmor-mode-network-rule-regexp
+      (3 font-lock-constant-face t) ;permissions
+      (4 font-lock-function-name-face t) ;domain
+      (5 font-lock-variable-name-face t) ;type
+      (6 font-lock-type-face t)) ; protocol
      ;; dbus rules
-     (,apparmor-mode-dbus-rule-regexp 4 font-lock-variable-name-face t) ;bus
-     (,apparmor-mode-dbus-rule-regexp 5 font-lock-constant-face t) ;system/session
-     (,apparmor-mode-dbus-rule-regexp 7 font-lock-variable-name-face t) ;dest
-     (,apparmor-mode-dbus-rule-regexp 10 font-lock-variable-name-face t)
-     (,apparmor-mode-dbus-rule-regexp 13 font-lock-variable-name-face t)
-     (,apparmor-mode-dbus-rule-regexp 16 font-lock-variable-name-face t))))
+     (,apparmor-mode-dbus-rule-regexp
+      (4 font-lock-variable-name-face t) ;bus
+      (5 font-lock-constant-face t) ;system/session
+      (7 font-lock-variable-name-face t) ;dest
+      (10 font-lock-variable-name-face t)
+      (13 font-lock-variable-name-face t)
+      (16 font-lock-variable-name-face t)))))
 
 (defvar apparmor-mode-syntax-table
   (let ((table (make-syntax-table)))
