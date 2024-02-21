@@ -59,7 +59,7 @@
   :group 'apparmor)
 
 (defvar apparmor-mode-keywords '("all" "audit" "capability" "chmod" "delegate"
-                                 "dbus" "deny" "flags" "io_uring" "include"
+                                 "dbus" "deny" "file" "flags" "io_uring" "include"
                                  "include if exists" "link" "mount" "mqueue"
                                  "network" "on" "owner" "pivot_root" "profile"
                                  "quiet" "remount" "rlimit" "safe" "subset" "to"
@@ -137,14 +137,14 @@
 (defvar apparmor-mode-file-rule-permissions-regexp "[CPUaciklmpruwx]+")
 
 (defvar apparmor-mode-file-rule-permissions-prefix-regexp
-  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*"
+  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*\\(?:file\\s-+\\)?"
           "\\(" apparmor-mode-file-rule-permissions-regexp "\\)\\s-+"
           "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-*"
           "\\(->\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
           ","))
 
 (defvar apparmor-mode-file-rule-permissions-suffix-regexp
-  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*"
+  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*\\(?:file\\s-+\\)"
           "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-+"
           "\\(" apparmor-mode-file-rule-permissions-regexp "\\)\\s-*"
           "\\(->\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
