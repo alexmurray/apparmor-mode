@@ -137,14 +137,14 @@
 (defvar apparmor-mode-file-rule-permissions-regexp "[CPUaciklmpruwx]+")
 
 (defvar apparmor-mode-file-rule-permissions-prefix-regexp
-  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*\\(?:file\\s-+\\)?"
+  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*\\(file\\s-+\\)?"
           "\\(" apparmor-mode-file-rule-permissions-regexp "\\)\\s-+"
           "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-*"
           "\\(->\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
           ","))
 
 (defvar apparmor-mode-file-rule-permissions-suffix-regexp
-  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*\\(?:file\\s-+\\)"
+  (concat "^\\s-*\\(\\(audit\\|owner\\|deny\\)\\s-+\\)*\\(file\\s-+\\)?"
           "\\(" apparmor-mode-profile-attachment-regexp "\\)\\s-+"
           "\\(" apparmor-mode-file-rule-permissions-regexp "\\)\\s-*"
           "\\(->\\s-+\\(" apparmor-mode-profile-attachment-regexp "\\)\\)?\\s-*"
@@ -210,11 +210,13 @@
      (,apparmor-mode-capability-regexp 2 font-lock-type-face t)
      ;; file rules
      (,apparmor-mode-file-rule-permissions-prefix-regexp
-      (3 font-lock-constant-face t) ; permissions
-      (6 font-lock-function-name-face nil t)) ;profile
-     (,apparmor-mode-file-rule-permissions-suffix-regexp
+      (3 font-lock-keyword-face nil t) ; class
       (4 font-lock-constant-face t) ; permissions
-      (6 font-lock-function-name-face nil t)) ;profile
+      (7 font-lock-function-name-face nil t)) ;profile
+     (,apparmor-mode-file-rule-permissions-suffix-regexp
+      (3 font-lock-keyword-face nil t) ; class
+      (5 font-lock-constant-face t) ; permissions
+      (7 font-lock-function-name-face nil t)) ;profile
      ;; network rules
      (,apparmor-mode-network-rule-regexp
       (3 font-lock-constant-face t) ;permissions
