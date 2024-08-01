@@ -352,7 +352,13 @@
   (when (process-live-p apparmor-mode--flymake-proc)
     (kill-process apparmor-mode--flymake-proc))
 
-  (let ((source (current-buffer)))
+  (let ((source (current-buffer))
+        (contents (buffer-substring (point-min) (point-max))))
+    ;; when the current buffer is an abstraction then fake a profile around it so
+    ;; we can check it
+    (when (and (buffer-file-name)
+               (string-match-p ".*/abstractions/.*" (buffer-file-name)))
+      (setq contents (format "profile %s { %s }" (buffer-name) contents)))
     (save-restriction
       (widen)
       ;; Reset the `apparmor-mode--flymake-proc' process to a new process
@@ -363,6 +369,8 @@
         :name "apparmor-mode-flymake" :noquery t :connection-type 'pipe
         ;; Make output go to a temporary buffer.
         :buffer (generate-new-buffer " *apparmor-mode-flymake*")
+        ;; TODO: specify the base directory so that includes resolve correctly
+        ;; rather than using the system ones
         :command '("apparmor_parser" "-Q" "-K" "/dev/stdin")
         :sentinel
         (lambda (proc _event)
@@ -391,11 +399,11 @@
                        collect (flymake-make-diagnostic source beg end type msg)
                        into diags
                        finally (funcall report-fn diags)))
-                  (flymake-log :warning "Canceling obsolete check %s" proc))
+                  (flymake-log :warning "Cancelling obsolete check %s" proc))
               ;; Cleanup the temporary buffer used to hold the
               ;; check's output.
               (kill-buffer (process-buffer proc)))))))
-      (process-send-region apparmor-mode--flymake-proc (point-min) (point-max))
+      (process-send-string apparmor-mode--flymake-proc contents)
       (process-send-eof apparmor-mode--flymake-proc))))
 
 ;;;###autoload
