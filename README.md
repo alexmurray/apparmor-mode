@@ -1,3 +1,7 @@
+# THIS REPO IS NOW ARCHIVED / FROZEN
+
+# All future development of apparmor-mode.el is now done in the upstream apparmor project repository at https://gitlab.com/apparmor/apparmor
+
 # An Emacs major mode for AppArmor policies
 
 [![License GPL 3](https://img.shields.io/badge/license-GPL_3-green.svg)](http://www.gnu.org/licenses/gpl-3.0.txt)
