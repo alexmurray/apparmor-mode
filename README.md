@@ -1,6 +1,6 @@
 # THIS REPO IS NOW ARCHIVED / FROZEN
 
-# All future development of apparmor-mode.el is now done in the upstream apparmor project repository at https://gitlab.com/apparmor/apparmor
+# All future development of apparmor-mode.el is now done under the upstream apparmor project repository at https://gitlab.com/apparmor/apparmor-mode
 
 # An Emacs major mode for AppArmor policies
 
